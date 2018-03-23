@@ -1,0 +1,3 @@
+*
+!dist/s/**/pack-axios.js
+!README.md
