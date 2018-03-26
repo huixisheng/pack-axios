@@ -25,9 +25,9 @@ describe('初始化添加默认配置', function () {
         response.data = 'pack-axios';
         return response;
       },
-      error(error) {
+      error() {
         // console.log('error', error);
-        return Promise.reject({ error: 'custom-error' });
+        return Promise.reject({ error: 'custom-error' }); // eslint-disable-line
         // return Promise.reject(error);
       },
     });
