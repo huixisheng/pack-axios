@@ -4,8 +4,8 @@
   "description": "axios二次封装",
   "main": "dist/pack-axios.js",
   "scripts": {
-    "test:watch": "./node_modules/mocha/bin/mocha --require babel-register --timeout 30000",
-    "test": "npm run eslint && ./node_modules/mocha/bin/mocha --require babel-register --watch  --timeout 30000",
+    "test:watch": "./node_modules/mocha/bin/mocha --require babel-register --watch --timeout 30000",
+    "test": "npm run eslint && ./node_modules/mocha/bin/mocha --require babel-register --timeout 30000",
     "eslint:diff": "node_modules/eslint/bin/eslint.js $(git diff-index HEAD --name-only --diff-filter ACMR |grep '\\.\\(jsx\\|es6\\|js\\|vue\\)$')",
     "eslint": "cross-env NODE_ENV=production node_modules/eslint/bin/eslint.js --max-warnings 10 --ext .js,.vue static src build config test fis-conf.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --color --progress",
