@@ -1,3 +1,4 @@
+![](https://travis-ci.org/huixisheng/pack-axios.svg?branch=master)
 # pack-axios
 
 > axios封装
