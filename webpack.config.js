@@ -43,7 +43,7 @@ const qiniuPluginAssets = new QiniuPlugin({
 
 module.exports = {
   entry: {
-    index: './src/index.js',
+    index: './src/lib.js',
   },
   output: {
     hashDigestLength: 8,
