@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Qs from 'qs';
+import objectAssign from 'object-assign'; // 处理部分国产浏览不兼容Object.assign
 
 // require('es6-promise').polyfill();
 (function (global) {
@@ -59,7 +60,7 @@ function HttpService(cfg) {
   //   return service;
   // }
 
-  const service = axios.create(Object.assign({
+  const service = axios.create(objectAssign({
     // 处理post请求返回Payload
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     transformRequest: [function (data) {

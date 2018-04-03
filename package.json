@@ -1,6 +1,6 @@
 {
   "name": "pack-axios",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "axios二次封装",
   "main": "dist/pack-axios.js",
   "scripts": {
@@ -22,6 +22,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "es6-promise": "^4.2.4",
+    "object-assign": "^4.1.1",
     "qs": "^6.5.1"
   },
   "devDependencies": {
@@ -62,7 +63,7 @@
     "vue-loader": "^14.2.1",
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.1",
+    "webpack-dev-server": "^2.11.2",
     "webpack-stats-plugin": "^0.2.1",
     "x-config-deploy": "^0.0.3"
   }
