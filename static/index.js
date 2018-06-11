@@ -53,6 +53,18 @@ service({
   console.log(error);
 });
 
+service({
+  url: 'https://easy-mock.com/mock/59ba562fe0dc663341aa54c3/v1/verify-params',
+  method: 'GET',
+  params: {
+    t2,
+  },
+}).then((response) => {
+  console.log('get2', response);
+}).catch((error) => {
+  console.log(error);
+});
+
 const t3 = new Date().getTime();
 console.log('t3: ', t3);
 service({

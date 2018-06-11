@@ -116,7 +116,7 @@ module.exports = {
     hints: false,
   },
   plugins: [
-    cleanPlugin,
+    // cleanPlugin,
     new StyleLintPlugin({
       failOnError: false,
       files: ['**/*.s?(a|c)ss', 'src/**/**/*.vue', 'src/***/*.css'],

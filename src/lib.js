@@ -10,13 +10,19 @@ import objectAssign from 'object-assign'; // 处理部分国产浏览不兼容Ob
   }
 })(typeof window !== 'undefined' ? window : global);
 
+
 class Queue {
   constructor() {
     this.list = [];
   }
 
+  static getQueueUniqueId(item) {
+    const uniqueKey = item.url + '_' + item.method + '_' + Qs.stringify(item.params);
+    return uniqueKey;
+  }
+
   enqueue(item) {
-    const uniqueKey = item.url + '&' + item.method;
+    const uniqueKey = Queue.getQueueUniqueId(item);
     let hasInQueue = false;
     const list = this.list;
     for (let i = list.length - 1; i >= 0; i--) {
@@ -34,7 +40,7 @@ class Queue {
   }
 
   dequeue(item) {
-    const uniqueKey = item.url + '&' + item.method;
+    const uniqueKey = Queue.getQueueUniqueId(item);
     const list = this.list;
     for (let i = list.length - 1; i >= 0; i--) {
       const listItem = list[i];
@@ -78,7 +84,7 @@ function HttpService(cfg) {
   // request拦截器
   service.interceptors.request.use((config) => {
     config.cancelToken = new CancelToken((c) => {
-      const id = config.url + '&' + config.method;
+      const id = Queue.getQueueUniqueId(config);
       const item = {
         id,
         cancel: c,

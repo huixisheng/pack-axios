@@ -54,15 +54,16 @@ describe('get request', function () {
     });
   });
 
-  it('多个请求获得数据，第1个请求有效', function (done) {
+  it('多个请求获得数据，去除相同请求数据的请求', function (done) {
     // https://github.com/mochajs/mocha/issues/2025
     // https://github.com/mochajs/mocha/issues/2958
     this.timeout(3000);
+    const timestamp = getTime();
     service({
       url: getUrl,
       method: 'GET',
       params: {
-        t: getTime(),
+        t: timestamp,
       },
     }).then((response) => {
       expect(response).to.be.an('object');
@@ -76,7 +77,7 @@ describe('get request', function () {
       url: getUrl,
       method: 'GET',
       params: {
-        t: getTime(),
+        t: timestamp,
       },
     }).then((response) => {
       console.log(response);
@@ -88,11 +89,25 @@ describe('get request', function () {
       url: getUrl,
       method: 'GET',
       params: {
-        t: getTime(),
+        t: timestamp,
       },
     }).catch((error) => {
       expect(error).to.be.an('object');
       expect(error.message).to.equal('cancal repeat request');
+    });
+    service({
+      url: getUrl,
+      method: 'GET',
+      params: {
+        t: getTime(),
+      },
+    }).then((response) => {
+      expect(response).to.be.an('object');
+      expect(response).to.include.any.keys('data', 'config');
+      expect(response.status).to.equal(200);
+      expect(response.data.msg).to.equal('OK');
+    }).catch(() => {
+      // (node:13054) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 107): [object Object]
     });
     setTimeout(() => {
       done();
