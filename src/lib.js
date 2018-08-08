@@ -22,15 +22,14 @@ class Queue {
   }
 
   enqueue(item) {
-    const uniqueKey = Queue.getQueueUniqueId(item);
     let hasInQueue = false;
     const list = this.list;
     for (let i = list.length - 1; i >= 0; i--) {
       const listItem = list[i];
-      if (listItem.id === uniqueKey) {
+      if (listItem.id === item.id) {
         hasInQueue = true;
-        if (typeof item.cancel === 'function') {
-          item.cancel('cancal request by repeat');
+        if (typeof item.cancelToken === 'function') {
+          item.cancelToken('cancelToken');
         }
       }
     }
@@ -39,15 +38,12 @@ class Queue {
     }
   }
 
-  dequeue(item) {
-    const uniqueKey = Queue.getQueueUniqueId(item);
+  dequeue(config) {
+    const uniqueKey = Queue.getQueueUniqueId(config);
     const list = this.list;
     for (let i = list.length - 1; i >= 0; i--) {
       const listItem = list[i];
       if (listItem.id === uniqueKey) {
-        if (typeof listItem.cancel === 'function') {
-          listItem.cancel('cancal repeat request');
-        }
         list.splice(i, 1);
       }
     }
@@ -81,13 +77,13 @@ function HttpService(cfg) {
 
   // service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-  // request拦截器
+  // https://github.com/axios/axios#interceptors 拦截器
   service.interceptors.request.use((config) => {
     config.cancelToken = new CancelToken((c) => {
       const id = Queue.getQueueUniqueId(config);
       const item = {
         id,
-        cancel: c,
+        cancelToken: c,
       };
       queueInstance.enqueue(item);
     });
@@ -100,7 +96,6 @@ function HttpService(cfg) {
     Promise.reject(error);
   });
 
-  // respone 拦截器
   /* eslint consistent-return: "off" */
   service.interceptors.response.use(
     (response) => {
@@ -111,6 +106,10 @@ function HttpService(cfg) {
       return response;
     },
     (error) => {
+      if (!axios.isCancel(error)) {
+        console.error('');
+        console.dir(error);
+      }
       if (cfg && typeof cfg.error === 'function') {
         return cfg.error.call(service, error);
       }
