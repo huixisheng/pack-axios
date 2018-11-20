@@ -10,7 +10,7 @@ function getTime() {
   return new Date().getTime();
 }
 
-describe('get request', function () {
+describe('POST request', function () {
   let service = null;
 
   before(() => {
@@ -21,47 +21,14 @@ describe('get request', function () {
     service = null;
   });
 
-  it('错误的请求方式', function (done) {
-    service({
-      url: getUrl,
-      method: 'POST',
-      params: {
-        t: getTime(),
-      },
-    }).catch((error) => {
-      expect(error).to.be.an('error');
-      done();
-    });
-  });
-
-  it('单独请求', function (done) {
-    service({
-      url: getUrl,
-      method: 'GET',
-      params: {
-        t: getTime(),
-      },
-    }).then((response) => {
-      expect(response).to.be.an('object');
-      expect(response).to.include.any.keys('data', 'config');
-      expect(response.status).to.equal(200);
-      expect(response.data.msg).to.equal('OK');
-      done();
-    }).catch((error) => {
-      console.log(error);
-      // done();
-      // (node:13054) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 107): [object Object]
-    });
-  });
-
-  it('多个请求获得数据，去除相同请求数据的请求', function (done) {
+  it('POST多个请求获得数据，去除相同请求数据的请求', function (done) {
     // https://github.com/mochajs/mocha/issues/2025
     // https://github.com/mochajs/mocha/issues/2958
     this.timeout(3000);
     const timestamp = getTime();
     service({
       url: getUrl,
-      method: 'GET',
+      method: 'POST',
       params: {
         t: timestamp,
       },
@@ -75,7 +42,7 @@ describe('get request', function () {
     });
     service({
       url: getUrl,
-      method: 'GET',
+      method: 'POST',
       params: {
         t: timestamp,
       },
@@ -87,7 +54,7 @@ describe('get request', function () {
     });
     service({
       url: getUrl,
-      method: 'GET',
+      method: 'POST',
       params: {
         t: timestamp,
       },
@@ -97,7 +64,7 @@ describe('get request', function () {
     });
     service({
       url: getUrl,
-      method: 'GET',
+      method: 'POST',
       params: {
         t: getTime(),
       },

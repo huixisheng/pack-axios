@@ -5,6 +5,7 @@ import objectAssign from 'object-assign'; // 处理部分国产浏览不兼容Ob
 // require('es6-promise').polyfill();
 (function (global) {
   // 安卓4.4 不支持promise
+  // TODO: 传参支持？
   if (!global.Promise) { // Promise polyfill
     require('es6-promise/auto'); // eslint-disable-line
   }
@@ -17,7 +18,13 @@ class Queue {
   }
 
   static getQueueUniqueId(item) {
-    const uniqueKey = item.url + '_' + item.method + '_' + Qs.stringify(item.params);
+    // fix:  POST方法是item.data
+    let uniqueKey = item.url + '_' + item.method;
+    if (item.method.toUpperCase() === 'POST') {
+      uniqueKey = uniqueKey + '_' + Qs.stringify(item.data);
+    } else {
+      uniqueKey = uniqueKey + '_' + Qs.stringify(item.params);
+    }
     return uniqueKey;
   }
 
@@ -106,14 +113,14 @@ function HttpService(cfg) {
       return response;
     },
     (error) => {
-      if (!axios.isCancel(error)) {
-        console.error('');
-        console.dir(error);
-      }
+      // if (!axios.isCancel(error)) {
+      //   console.error('');
+      //   console.dir(error);
+      // }
       if (cfg && typeof cfg.error === 'function') {
         return cfg.error.call(service, error);
       }
-      // {"0":{"config":{"transformRequest":{},"transformResponse":{},"timeout":10000,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","Authorization":"Authorization"},"method":"get","url":"/api/user/info","data":"{}"},"request":{},"response":{"data":"...","status":404,"statusText":"Not Found","headers":{"date":"Wed, 16 Aug 2017 16:04:32 GMT","content-encoding":"gzip","server":"cosmeapp/2015","x-powered-by":"PHP/7.1.0","vary":"Accept-Encoding","content-type":"text/html; charset=UTF-8","access-control-allow-origin":"","cache-control":"no-cache, private","transfer-encoding":"chunked"},"config":{"transformRequest":{},"transformResponse":{},"timeout":10000,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","Authorization":"Authorization"},"method":"get","url":"/api/user/info","data":"{}"},"request":{}}}}
+      // {"config":{"transformRequest":{},"transformResponse":{},"timeout":10000,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","Authorization":"Authorization"},"method":"get","url":"/api/user/info","data":"{}"},"request":{},"response":{"data":"...","status":404,"statusText":"Not Found","headers":{"date":"Wed, 16 Aug 2017 16:04:32 GMT","content-encoding":"gzip","server":"cosmeapp/2015","x-powered-by":"PHP/7.1.0","vary":"Accept-Encoding","content-type":"text/html; charset=UTF-8","access-control-allow-origin":"","cache-control":"no-cache, private","transfer-encoding":"chunked"},"config":{"transformRequest":{},"transformResponse":{},"timeout":10000,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","Authorization":"Authorization"},"method":"get","url":"/api/user/info","data":"{}"},"request":{}}}
       // console.log('interceptors.response', error.data);
       return Promise.reject(error);
     },
