@@ -3,7 +3,7 @@ const util = require('util');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const xConfig = require('x-config-deploy').getConfig();
+const configDeploy = require('x-config-deploy');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpackConfig = require('@x-scaffold/webpack-config');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
@@ -17,7 +17,7 @@ const _ = require('node-plus-string');
 const pkg = require('./package.json');
 const PORT = portFinderSync.getPort(8080);
 const PROJECT_NANE = getProjectName();
-const qiniuDomain = xConfig.qiniuLibConfig.origin;
+const qiniuDomain = configDeploy.get('qiniuDeploy.domain');
 const distBasePath = `s/${pkg.version}`;
 
 function resolve(dir) {
@@ -33,9 +33,9 @@ const cleanPlugin = new CleanWebpackPlugin(['dist'], {
 });
 
 const qiniuPluginAssets = new QiniuPlugin({
-  ACCESS_KEY: xConfig.qiniuLibConfig.accessKey,
-  SECRET_KEY: xConfig.qiniuLibConfig.secretKey,
-  bucket: xConfig.qiniuLibConfig.bucket,
+  ACCESS_KEY: configDeploy.get('qiniuDeploy.accessKey'),
+  SECRET_KEY: configDeploy.get('qiniuDeploy.secretKey'),
+  bucket: configDeploy.get('qiniuDeploy.bucket'),
   // include 可选项。你可以选择上传的文件，比如['main.js']``或者[/main/]`
   include: [new RegExp(getProjectName())],
   path: distBasePath,
@@ -163,12 +163,12 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"',
       },
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
-      compress: {
-        warnings: false,
-      },
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   sourceMap: false,
+    //   compress: {
+    //     warnings: false,
+    //   },
+    // }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
     }),
