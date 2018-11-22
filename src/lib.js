@@ -19,12 +19,19 @@ class Queue {
 
   static getQueueUniqueId(item) {
     // fix:  POST方法是item.data
-    let uniqueKey = item.url + '_' + item.method;
+    let uniqueKey = item.url + '?method=' + item.method;
+    let params = item.params;
     if (item.method.toUpperCase() === 'POST') {
-      uniqueKey = uniqueKey + '_' + Qs.stringify(item.data);
-    } else {
-      uniqueKey = uniqueKey + '_' + Qs.stringify(item.params);
+      params = item.data;
     }
+    let res = '';
+    if (typeof params === 'string') {
+      res = params;
+    } else {
+      res = Qs.stringify(params);
+    }
+    uniqueKey = uniqueKey + '&' + res;
+    // console.log(uniqueKey);
     return uniqueKey;
   }
 
@@ -63,13 +70,13 @@ class Queue {
 const CancelToken = axios.CancelToken;
 // let service;
 
-function HttpService(cfg) {
+function HttpService(options) {
   const queueInstance = new Queue();
   // if (service) {
   //   return service;
   // }
-
-  const service = axios.create(objectAssign({
+  const axiosConfig = objectAssign({
+    silent: true,
     // 处理post请求返回Payload
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     transformRequest: [function (data) {
@@ -80,26 +87,32 @@ function HttpService(cfg) {
     //   cancel = c;
     // }),
     timeout: 10000, // 请求超时时间
-  }, cfg));
+  }, options);
+
+  const service = axios.create(axiosConfig);
+  const silent = axiosConfig.silent;
 
   // service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
   // https://github.com/axios/axios#interceptors 拦截器
   service.interceptors.request.use((config) => {
+    if (config && typeof config.before === 'function') {
+      config = config.before.call(service, config);
+    }
     config.cancelToken = new CancelToken((c) => {
       const id = Queue.getQueueUniqueId(config);
+      // console.log('cancelToken id: ', id);
       const item = {
         id,
         cancelToken: c,
       };
       queueInstance.enqueue(item);
     });
-    if (cfg && typeof cfg.before === 'function') {
-      return cfg.before.call(service, config);
-    }
     return config;
   }, (error) => {
-    console.log('interceptors.request', error);
+    if (!silent) {
+      console.error('interceptors.request.error');
+    }
     Promise.reject(error);
   });
 
@@ -107,21 +120,23 @@ function HttpService(cfg) {
   service.interceptors.response.use(
     (response) => {
       queueInstance.dequeue(response.config);
-      if (cfg && typeof cfg.success === 'function') {
-        return cfg.success.call(service, response);
+      if (axiosConfig && typeof axiosConfig.success === 'function') {
+        return axiosConfig.success.call(service, response);
       }
       return response;
     },
     (error) => {
+      // 接口404
       // if (!axios.isCancel(error)) {
       //   console.error('');
       //   console.dir(error);
       // }
-      if (cfg && typeof cfg.error === 'function') {
-        return cfg.error.call(service, error);
+      if (!silent) {
+        console.error('interceptors.response.error');
       }
-      // {"config":{"transformRequest":{},"transformResponse":{},"timeout":10000,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","Authorization":"Authorization"},"method":"get","url":"/api/user/info","data":"{}"},"request":{},"response":{"data":"...","status":404,"statusText":"Not Found","headers":{"date":"Wed, 16 Aug 2017 16:04:32 GMT","content-encoding":"gzip","server":"cosmeapp/2015","x-powered-by":"PHP/7.1.0","vary":"Accept-Encoding","content-type":"text/html; charset=UTF-8","access-control-allow-origin":"","cache-control":"no-cache, private","transfer-encoding":"chunked"},"config":{"transformRequest":{},"transformResponse":{},"timeout":10000,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","Authorization":"Authorization"},"method":"get","url":"/api/user/info","data":"{}"},"request":{}}}
-      // console.log('interceptors.response', error.data);
+      if (axiosConfig && typeof axiosConfig.error === 'function') {
+        return axiosConfig.error.call(service, error);
+      }
       return Promise.reject(error);
     },
   );

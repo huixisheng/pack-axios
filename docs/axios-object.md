@@ -274,6 +274,7 @@ data:
 
 ## error ##
 
+```
 { Error: Request failed with status code 404
     at createError (/Users/huixisheng/Workspaces/mobileApp/library/pack-axios/node_modules/axios/lib/core/createError.js:16:15)
     at settle (/Users/huixisheng/Workspaces/mobileApp/library/pack-axios/node_modules/axios/lib/core/settle.js:18:12)
@@ -581,4 +582,9 @@ data:
         maxHeadersCount: null,
         _redirectable: [Object],
         [Symbol(outHeadersKey)]: [Object] },
-     data: { error: 'Not Found' } } }
+     data: { error: 'Not Found' } 
+  } 
+}
+```
+
+

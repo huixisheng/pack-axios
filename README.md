@@ -12,3 +12,6 @@
 - https://github.com/axios/axios
 - [axios的秘密](https://zhuanlan.zhihu.com/p/33918784)
 - [前端 | 浅谈axios](https://www.jianshu.com/p/065294e2711c)
+- https://www.jianshu.com/p/b22d03dfe006
+- https://juejin.im/post/5b3c37e65188251aaa2d087a
+- https://segmentfault.com/q/1010000008462977

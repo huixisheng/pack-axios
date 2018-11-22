@@ -1,13 +1,11 @@
 import { expect } from 'chai';
+import { postUrl } from './url';
 import HttpService from '../src/lib';
 
-// const service = new HttpService();
-// const expect = chai.expect;
-const getUrl = 'https://easy-mock.com/mock/59ba562fe0dc663341aa54c3/v1/verify-params';
-// const postUrl = '';
-
+let udid = 0;
 function getTime() {
-  return new Date().getTime();
+  return ++udid;
+  // return new Date().getTime() + new Date().getMilliseconds();
 }
 
 describe('POST request', function () {
@@ -24,60 +22,66 @@ describe('POST request', function () {
   it('POST多个请求获得数据，去除相同请求数据的请求', function (done) {
     // https://github.com/mochajs/mocha/issues/2025
     // https://github.com/mochajs/mocha/issues/2958
-    this.timeout(3000);
+    this.timeout(10000);
     const timestamp = getTime();
     service({
-      url: getUrl,
+      url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then((response) => {
       expect(response).to.be.an('object');
       expect(response).to.include.any.keys('data', 'config');
       expect(response.status).to.equal(200);
-      expect(response.data.msg).to.equal('OK');
-    }).catch(() => {
+      expect(response.data.msg).to.be.a('string');
+    }).catch((error) => {
+      expect.fail(error);
       // (node:13054) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 107): [object Object]
     });
     service({
-      url: getUrl,
+      url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then((response) => {
-      console.log(response);
+      expect.fail(response);
     }).catch((error) => {
       expect(error).to.be.an('object');
       expect(error.message).to.equal('cancelToken');
     });
     service({
-      url: getUrl,
+      url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
+    }).then((response) => {
+      expect.fail(response);
     }).catch((error) => {
       expect(error).to.be.an('object');
       expect(error.message).to.equal('cancelToken');
     });
+
     service({
-      url: getUrl,
+      url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: getTime(),
       },
     }).then((response) => {
       expect(response).to.be.an('object');
       expect(response).to.include.any.keys('data', 'config');
       expect(response.status).to.equal(200);
-      expect(response.data.msg).to.equal('OK');
-    }).catch(() => {
+      expect(response.data.msg).to.be.a('string');
+    }).catch((error) => {
+      expect.fail(error);
       // (node:13054) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 107): [object Object]
     });
+
     setTimeout(() => {
       done();
-    }, 500);
+    }, 8000);
   });
 });
