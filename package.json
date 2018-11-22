@@ -1,6 +1,6 @@
 {
   "name": "pack-axios",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "axios二次封装",
   "main": "dist/pack-axios.js",
   "scripts": {
