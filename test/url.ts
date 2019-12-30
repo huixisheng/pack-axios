@@ -2,8 +2,8 @@
 // export const getUrl = 'https://easy-mock.com/mock/5ad8a552f3464d4f566fe012/pack-axios-get';
 // export const postUrl = 'https://easy-mock.com/mock/5ad8a552f3464d4f566fe012/pack-axios-post';
 // export const postErrorUrl = 'https://easy-mock.com/mock/5ad8a552f3464d4f566fe012/pack-axios-post-error';
-export const getUrl = 'http://yapi.demo.qunar.com/mock/29414/5ad8a552f3464d4f566fe012/pack-axios-get';
-export const postUrl = 'http://yapi.demo.qunar.com/mock/29414/5ad8a552f3464d4f566fe012/pack-axios-post';
+export const getUrl = 'http://yapi.demo.qunar.com/mock/66759/pack-axios-get';
+export const postUrl = 'http://yapi.demo.qunar.com/mock/66759/pack-axios-post';
 export const postErrorUrl = 'http://yapi.demo.qunar.com/mock/29414/5ad8a552f3464d4f566fe012/pack-axios-post-error';
 
 // {
@@ -14,3 +14,6 @@ export const postErrorUrl = 'http://yapi.demo.qunar.com/mock/29414/5ad8a552f3464
 //       "method": "get"
 //     }
 //   }
+
+// pack-axios@qq.com
+// pack-axios

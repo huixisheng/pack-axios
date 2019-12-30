@@ -7,6 +7,8 @@
 - 处理重复请求
 - 添加Promise适配不支持的浏览器
 - post请求参数处理
+- 支持 TypeScript
+
 
 ## 参考 ##
 - https://github.com/axios/axios
