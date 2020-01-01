@@ -1,5 +1,8 @@
 import axios, {
-  AxiosRequestConfig, AxiosResponse, AxiosError, AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+  AxiosInstance,
 } from 'axios';
 import Qs from 'qs';
 import Queue from './queue';
@@ -93,7 +96,9 @@ class HttpService {
     /* eslint consistent-return: "off" */
     service.interceptors.response.use(
       (response) => {
-        queueInstance.dequeue(response.config);
+        if (options.didRequestRepeat) {
+          queueInstance.dequeue(response.config);
+        }
         if (options && typeof options.requestSuccess === 'function') {
           return options.requestSuccess.call(service, response);
         }
@@ -113,6 +118,26 @@ class HttpService {
     if (this.options.silent) {
       console.log(args);
     }
+  }
+
+  // https://github.com/axios/axios/blob/master/dist/axios.js#L561
+  async get<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
+    const res: AxiosResponse<T> = await this.service.get(url, {
+        params: data,
+        ...config,
+    });
+    return res.data;
+  }
+
+  // https://github.com/axios/axios/blob/master/dist/axios.js#L571
+  async post<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
+    const res: AxiosResponse<T> = await this.service.post(url, data, config = {});
+    return res.data;
+  }
+
+  async put<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
+    const res: AxiosResponse<T> = await this.service.put(url, data, config = {});
+    return res.data;
   }
 }
 

@@ -1,4 +1,4 @@
-import { getUrl, postUrl } from './url';
+import { getUrl, postUrlErrorCode } from './url';
 import HttpService from '../src/lib';
 
 function getTime() {
@@ -17,7 +17,7 @@ describe('初始化 requestBefore', function () {
         return config;
       },
     }, {
-      timeout: 2000,
+      timeout: 4000,
     });
   });
 
@@ -100,6 +100,7 @@ describe('初始化 requestSuccess 异常数据', function () {
         if (response.data.code === 200) {
           return response.data;
         }
+        console.log('初始化 requestSuccess 异常数据', '初始化 requestSuccess 异常数据');
         return Promise.reject(response.data);
       },
     }, {
@@ -111,12 +112,12 @@ describe('初始化 requestSuccess 异常数据', function () {
     httpService = null;
   });
 
-  test('post正常请求', (done) => {
+  test('post 正常请求 code 非200', (done) => {
     if (!httpService) return;
     httpService.service.request({
-      url: postUrl,
+      url: postUrlErrorCode,
       method: 'POST',
-      params: {
+      data: {
         t: getTime(),
       },
     }).then(() => {

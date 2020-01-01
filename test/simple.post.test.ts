@@ -25,7 +25,7 @@ describe('post request', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: getTime(),
       },
     }).then((response) => {
@@ -50,7 +50,7 @@ describe('post request', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then((response) => {
@@ -68,7 +68,7 @@ describe('post request', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then((response) => {
@@ -82,7 +82,7 @@ describe('post request', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then((response) => {
@@ -114,7 +114,7 @@ describe('post request 不处理重复请求', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: getTime(),
       },
     }).then((response) => {
@@ -139,7 +139,7 @@ describe('post request 不处理重复请求', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then((response) => {
@@ -157,7 +157,7 @@ describe('post request 不处理重复请求', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then((response) => {
@@ -174,7 +174,7 @@ describe('post request 不处理重复请求', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then((response) => {
@@ -209,7 +209,7 @@ describe('post request 处理重复请求', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: getTime(),
       },
     }).then((response) => {
@@ -234,7 +234,7 @@ describe('post request 处理重复请求', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then((response) => {
@@ -251,7 +251,7 @@ describe('post request 处理重复请求', function () {
     httpService.service({
       url: postUrl,
       method: 'POST',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then(() => {
@@ -263,7 +263,7 @@ describe('post request 处理重复请求', function () {
     httpService.service({
       url: postUrl,
       method: 'post',
-      params: {
+      data: {
         t: timestamp,
       },
     }).then(() => {

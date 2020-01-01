@@ -18,7 +18,7 @@ export default class Queue {
     let params = item.params;
     // TODO put etc
     // fix:  POST方法是item.data
-    if (item.method && item.method.toUpperCase() === 'POST') {
+    if (item.method && ['post', 'put', 'patch'].indexOf(item.method.toLocaleLowerCase()) >= 0) {
       params = item.data;
     }
     let res = '';
