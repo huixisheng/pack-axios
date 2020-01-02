@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "ES5",
+    "module": "CommonJS",
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
     "baseUrl": "./",
+    "noEmit": false,
+    "declarationDir": "dist/types",
     "types": ["node", "jest"],
     "paths": {
       "*": [
@@ -17,7 +19,10 @@
       "node_modules/@types"
     ],
     "downlevelIteration": true,
-    "lib": ["es2015", "dom"],
+    "lib": ["ES2015", "DOM"],
     "esModuleInterop": true
-  }
+  },
+  "include": [
+		"src/**/*"
+	]
 }

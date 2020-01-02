@@ -1,6 +1,7 @@
 {
   "presets": [
-    ["env", {
+    "@babel/typescript",
+    ["@babel/preset-env", {
       "targets": {
         "browsers": [
           "Android >= 4.0",
@@ -14,5 +15,13 @@
         ]
       }
     }]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ]
   ]
 }
