@@ -93,16 +93,20 @@ describe('instance put async', () => {
   test('去除多个重复的 put 请求', async () => {
     if (!httpService) return;
     try {
-      await httpService.put<responseData>(putUrl, { t: timestamp });
       const res = await httpService.put<responseData>(putUrl, { t: timestamp });
       const response = res;
       expect(typeof response).toBe('object');
       expect(response).toHaveProperty('data');
       expect(response).toHaveProperty('msg');
       expect(response.code).toEqual(200);
-    } catch(error) {
-      // TODO:async 调用方式跟预期有出入
-      console.log(error, '--dd--');
+      const res1 = await httpService.put<responseData>(putUrl, { t: timestamp });
+      console.log('---aa--', res1);
+      expect(true).toEqual(false);
+    } catch (error) {
+      const response = error;
+      expect(typeof response).toBe('object');
+      expect(response).toHaveProperty('message');
+      expect(response.message).toEqual('requestAbort');
     }
   });
 });

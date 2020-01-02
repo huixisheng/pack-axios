@@ -1,4 +1,4 @@
-const service = new packAxios.default(); // eslint-disable-line
+const service = new packAxios().service; // eslint-disable-line
 
 // https://easy-mock.com/mock/59ba562fe0dc663341aa54c3/v1/verify-params
 console.log('service instance', service);
