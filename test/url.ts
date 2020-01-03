@@ -7,9 +7,13 @@
 export const postErrorUrl = 'http://yapi.demo.qunar.com/mock/29414/5ad8a552f3464d4f566fe012/pack-axios-post-error';
 
 export const getUrl = 'http://rap2api.taobao.org/app/mock/241456/pack-axios-get';
+export const deleteUrl = 'http://rap2api.taobao.org/app/mock/241456/pack-axios-delete';
+export const headUrl = 'http://rap2api.taobao.org/app/mock/241456/pack-axios-head';
 export const postUrl = 'http://rap2api.taobao.org/app/mock/241456/pack-axios-post';
+export const optionsUrl = 'http://rap2api.taobao.org/app/mock/241456/pack-axios-options';
 export const putUrl = 'http://rap2api.taobao.org/app/mock/241456/pack-axios-put';
 export const postUrlErrorCode = 'http://rap2api.taobao.org/app/mock/241456/pack-axios-post-error';
+export const patchUrl = 'http://rap2api.taobao.org/app/mock/241456/pack-axios-patch';
 // export const getUrl = 'http://localhost:3000/pack-axios-get';
 // export const postUrl = 'http://localhost:3000/pack-axios-post';
 

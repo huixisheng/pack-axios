@@ -43,7 +43,8 @@ const defaultAjaxConfig:AxiosRequestConfig = {
   // cancelToken: new CancelToken(function (c) {
   //   cancel = c;
   // }),
-  timeout: 5 * 1000, // 请求超时时间
+  // 请求超时时间
+  timeout: 5 * 1000,
 };
 
 class HttpService {
@@ -51,13 +52,13 @@ class HttpService {
 
   public axiosOpts: AxiosRequestConfig;
 
-  public options: packAxiosConfigInterface;
+  public configs: packAxiosConfigInterface;
 
   public service: AxiosInstance;
 
 
   constructor(options?: packAxiosConfigInterface, axiosOpts?: AxiosRequestConfig) {
-    this.options = objectAssign(defaultOptions, options || {});
+    this.configs = objectAssign(defaultOptions, options || {});
     this.axiosOpts = objectAssign(defaultAjaxConfig, axiosOpts || {});
     this.queueInstance = new Queue();
     this.service = axios.create(this.axiosOpts);
@@ -67,7 +68,7 @@ class HttpService {
   axiosSetup() {
     const service = this.service;
     const queueInstance = this.queueInstance;
-    const options = this.options;
+    const options = this.configs;
     const log = this.log.bind(this);
 
     // https://github.com/axios/axios#interceptors 拦截器
@@ -97,7 +98,10 @@ class HttpService {
     service.interceptors.response.use(
       (response) => {
         if (options.didRequestRepeat) {
-          queueInstance.dequeue(response.config);
+          // 特殊处理使用 await/async 重复请求处理失败
+          setTimeout(() => {
+            queueInstance.dequeue(response.config);
+          }, 0);
         }
         if (options && typeof options.requestSuccess === 'function') {
           return options.requestSuccess.call(service, response);
@@ -115,7 +119,7 @@ class HttpService {
   }
 
   log(...args: any) {
-    if (this.options.silent) {
+    if (this.configs.silent) {
       console.log(args);
     }
   }
@@ -123,8 +127,32 @@ class HttpService {
   // https://github.com/axios/axios/blob/master/dist/axios.js#L561
   async get<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
     const res: AxiosResponse<T> = await this.service.get(url, {
-        params: data,
-        ...config,
+      params: data,
+      ...config,
+    });
+    return res.data;
+  }
+
+  async delete<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
+    const res: AxiosResponse<T> = await this.service.delete(url, {
+      params: data,
+      ...config,
+    });
+    return res.data;
+  }
+
+  async head<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
+    const res: AxiosResponse<T> = await this.service.head(url, {
+      params: data,
+      ...config,
+    });
+    return res.data;
+  }
+
+  async options<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
+    const res: AxiosResponse<T> = await this.service.options(url, {
+      params: data,
+      ...config,
     });
     return res.data;
   }
@@ -139,7 +167,11 @@ class HttpService {
     const res: AxiosResponse<T> = await this.service.put(url, data, config = {});
     return res.data;
   }
-}
 
+  async patch<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
+    const res: AxiosResponse<T> = await this.service.patch(url, data, config = {});
+    return res.data;
+  }
+}
 
 export default HttpService;
