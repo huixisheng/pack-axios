@@ -2,7 +2,8 @@ import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import json from '@rollup/plugin-json';
-import nodent from 'rollup-plugin-nodent';
+// import nodent from 'rollup-plugin-nodent';
+// eslint-disable-next-line import/extensions
 import pkg from './package.json';
 
 const extensions = [
@@ -44,20 +45,23 @@ export default {
     // }),
   ],
 
-  output: [{
-    file: pkg.main,
-    format: 'cjs',
-  }, {
-    file: pkg.module,
-    format: 'es',
-  }, {
-    file: pkg.browser,
-    format: 'iife',
-    name,
-
-    // https://rollupjs.org/guide/en#output-globals-g-globals
-    globals: {
-      "@babel/runtime/regenerator": "regeneratorRuntime"
+  output: [
+      {
+      file: pkg.main,
+      format: 'cjs',
     },
-  }],
+    {
+      file: pkg.module,
+      format: 'es',
+    },
+    // {
+    //   file: pkg.browser,
+    //   format: 'iife',
+    //   name,
+    //   // https://rollupjs.org/guide/en#output-globals-g-globals
+    //   globals: {
+    //     "@babel/runtime/regenerator": "regeneratorRuntime"
+    //   },
+    // },
+  ],
 };

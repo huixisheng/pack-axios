@@ -159,17 +159,17 @@ class HttpService {
 
   // https://github.com/axios/axios/blob/master/dist/axios.js#L571
   async post<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
-    const res: AxiosResponse<T> = await this.service.post(url, data, config = {});
+    const res: AxiosResponse<T> = await this.service.post(url, data, config);
     return res.data;
   }
 
   async put<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
-    const res: AxiosResponse<T> = await this.service.put(url, data, config = {});
+    const res: AxiosResponse<T> = await this.service.put(url, data, config);
     return res.data;
   }
 
   async patch<T>(this: any, url: string, data?: any, config?: AxiosRequestConfig) {
-    const res: AxiosResponse<T> = await this.service.patch(url, data, config = {});
+    const res: AxiosResponse<T> = await this.service.patch(url, data, config);
     return res.data;
   }
 }
